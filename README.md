@@ -54,6 +54,6 @@ Le projet vise à proposer une architecture complète mêlant jeu multijoueur te
 - Cyprien MUYARD
 - Ozan GUNES
 
-## Note Obtenue 
+## Note obtenue 
 
 Projet noté **20/20** à l'Université Jean Monnet (année 2024-2025)
