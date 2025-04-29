@@ -1,4 +1,4 @@
-# Projet Intégré Master 1 - MMORPG Complet
+# Projet Intégré Master 1 - MMORPGVORTX
 
 ## Introduction
 
