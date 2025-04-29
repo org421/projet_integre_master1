@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="'Sujet : ' + ${topic.title}"></title>
+  <link href="/CSS/topic.css" rel="stylesheet">
+</head>
+<body class="forum-page">
+<div id="forum-container" class="container">
+  <h1 id="topic-title" th:text="${topic.title}">Titre du sujet</h1>
+
+  <p id="topic-content" th:text="${topic.content}">Contenu du sujet</p>
+  <p id="topic-info">
+    <strong>Vues :</strong> <span id="topic-views" th:text="${topic.views}">0</span>
+  </p>
+  <p>
+    <strong>Date de création :</strong> <span id="topic-date" th:text="${topic.createdAt}">2025-01-20</span>
+  </p>
+
+  <hr id="separator">
+
+  <h2 id="replies-title">Réponses</h2>
+  <ul id="replies-list">
+    <li class="reply-item" th:each="reply : ${replies}">
+      <p class="reply-author" th:text="${reply.author.getUsername()}">Auteur de la réponse</p>
+      <p class="reply-content" th:text="${reply.content}">Contenu de la réponse</p>
+      <p class="reply-date">
+        <small>Posté le <span th:text="${reply.createdAt}">Date</span></small>
+      </p>
+    </li>
+  </ul>
+
+  <hr id="separator">
+
+  <h3 id="add-reply-title">Ajouter une réponse</h3>
+  <form id="reply-form" action="#" method="post" th:action="@{/forum/topic/add-reply}">
+    <input type="hidden" id="topic-id" name="topicId" th:value="${topic.id}" />
+    <textarea id="reply-content" name="content" rows="5" cols="50" placeholder="Votre réponse..."></textarea>
+    <button type="submit" id="submit-reply">Envoyer</button>
+  </form>
+
+  <form id="back-form" th:action="@{/forum}" method="get">
+    <button type="submit" id="back-button" class="btn-retour">Retour à la catégorie</button>
+  </form>
+</div>
+</body>
+
+
+</html>

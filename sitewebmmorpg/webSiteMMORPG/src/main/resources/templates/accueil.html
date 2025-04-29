@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script src="/JS/accueil.js"></script>
+    <link href="/CSS/accueil.css" rel="stylesheet">
+</head>
+<body>
+<div class="container-fuild ">
+    <div class="position-relative">
+        <img class="d-block w-100" height="500" src="/img/imgFond.jpeg" alt="Third slide" style="object-fit: cover;">
+        <a class="button position-absolute" href="/empty.zip" style="top: 50%; left: 50%; transform: translate(-50%, -50%);" target="_blank" download>
+            <span class="button_lg">
+                <span class="button_sl"></span>
+                <span class="button_text">Télécharger</span>
+            </span>
+        </a>
+
+    </div>
+</div>
+<br>
+<div class="mt-4 bg-dark container-fluid">
+    <div class="row p-4">
+        <div class="card col m-4 w-50">
+            <div th:if="${lastActualite != null}" class="card-body">
+                <h5 class="card-title">Dernière actualité:</h5>
+                <h6 class="card-subtitle mb-2 text-muted" th:text="${lastActualite.title}"></h6>
+                <p class="card-text" th:text="${lastActualite.description}"></p>
+                <a th:href="@{/voir-article/{id}(id=${lastActualite.id})}" class="card-link">Voir l'article</a>
+                <a href="/list-actualite" class="card-link">Voir toute les actualités</a>
+            </div>
+        </div>
+        <div class="card col m-4 w-50">
+            <div th:if="${lastPatch != null}" class="card-body">
+                <h5 class="card-title">Patch:</h5>
+                <h6 class="card-subtitle mb-2 text-muted" th:text="${lastPatch.title}"></h6>
+                <p class="card-text" th:text="${lastPatch.description}"></p>
+                <a th:href="@{/voir-article/{id}(id=${lastPatch.id})}" class="card-link">Voir l'article</a>
+                <a href="/list-patch" class="card-link">Voir tout les patchs</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

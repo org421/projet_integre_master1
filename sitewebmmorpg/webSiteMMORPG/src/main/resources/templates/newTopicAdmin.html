@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+</head>
+<body>
+<div class="container mt-5">
+    <h1 th:text="'Créer un nouveau sujet pour la catégorie : ' + ${category.name}"></h1>
+    <form action="/admin/createTopic" method="post">
+
+        <div class="form-group">
+            <label for="titre">Titre du sujet :</label>
+            <input type="text" name="Titre" class="form-control" id="titre" placeholder="Titre du sujet" required>
+        </div>
+
+        <div class="form-group mt-3">
+            <label for="contenue">Contenu :</label>
+            <textarea name="Contenue" class="form-control" id="contenue" placeholder="Contenu du sujet" required></textarea>
+        </div>
+
+        <input type="hidden" name="idCategory" th:value="${category.id}" />
+
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+
+        <!-- Bouton soumettre -->
+        <button class="btn btn-primary mt-3" type="submit">Enregistrer</button>
+    </form>
+</div>
+</body>
+</html>

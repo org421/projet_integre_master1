@@ -1,0 +1,16 @@
+
+/*.container-fluid {*/
+/*    max-width: 1200px;*/
+/*    margin: 0 auto;*/
+/*}*/
+.content-wrapper {
+    overflow-wrap: break-word; /* Gère les longues chaînes de texte */
+    word-wrap: break-word; /* Compatibilité supplémentaire */
+    word-break: break-word; /* Permet de couper les mots */
+}
+
+.content-wrapper img,
+.content-wrapper table {
+    max-width: 100%;
+    height: auto;
+}

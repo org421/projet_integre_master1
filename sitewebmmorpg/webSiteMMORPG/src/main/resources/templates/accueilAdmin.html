@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Stats global</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+<div class="container mt-5">
+    <h1>Stats global</h1>
+    <div>
+        <h3>État du Serveur</h3>
+        <p>Statut : <span id="server-status">Chargement...</span></p>
+        <p>Uptime : <span id="server-uptime">Chargement...</span></p>
+    </div>
+</div>
+
+<script>
+    // Appel API pour récupérer l'état du serveur
+    axios.get('/admin/server-status')
+        .then(response => {
+            const data = response.data;
+            document.getElementById('server-status').innerText = data.status;
+            document.getElementById('server-uptime').innerText = data.uptime;
+        })
+        .catch(error => {
+            console.error('Erreur lors de la récupération des données :', error);
+            document.getElementById('server-status').innerText = "Erreur de connexion";
+        });
+</script>
+</body>
+</html>

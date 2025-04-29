@@ -1,0 +1,177 @@
+/* Style global pour le forum */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+/* Conteneur principal */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Titre du forum */
+h1 {
+    font-size: 3rem;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+/* Barre de recherche */
+#search-bar {
+    font-size: 1.2rem;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 50%;
+}
+
+#search-bar:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+/* Conteneur des sections */
+.forum-container {
+    margin-top: 30px;
+}
+
+/* Menu de navigation */
+.nav-menu {
+    margin-bottom: 30px;
+}
+
+.nav-menu button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.nav-menu button:hover {
+    background-color: #0056b3;
+}
+
+/* Sections du forum */
+.content-section {
+    margin-bottom: 40px;
+    display: none;
+}
+
+.content-section h2 {
+    font-size: 2rem;
+    color: #333;
+}
+
+/* Liste des sujets */
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+ul li {
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    background-color: white;
+}
+
+ul li:hover {
+    background-color: #f1f1f1;
+}
+
+ul li a {
+    font-size: 1.2rem;
+    color: #007bff;
+    text-decoration: none;
+}
+
+ul li a:hover {
+    text-decoration: underline;
+}
+
+/* Informations sur le sujet */
+ul li p {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Formulaire de création de sujet */
+form {
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+form label {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+form input, form select, form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+}
+
+form textarea {
+    height: 200px;
+}
+
+form button {
+    background-color: #007bff;
+    color: white;
+    font-size: 1.1rem;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+form button:hover {
+    background-color: #0056b3;
+}
+
+/* Alertes pour erreurs ou succès */
+.alert {
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    color: white;
+    font-size: 1rem;
+}
+
+.alert-danger {
+    background-color: #dc3545;
+}
+
+.alert-success {
+    background-color: #28a745;
+}
+
+/* Bouton Créer un Nouveau Sujet */
+.btn-dark {
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    background-color: #343a40;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-dark:hover {
+    background-color: #23272b;
+}

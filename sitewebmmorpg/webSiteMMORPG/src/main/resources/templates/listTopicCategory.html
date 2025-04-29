@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="'Sujets dans ' + ${category.name}"></title>
+</head>
+<body>
+<h1 th:text="'Sujets dans ' + ${category.name}"></h1>
+<ul>
+  <li th:each="topic : ${topics}">
+    <a th:href="@{/forum/topic(id=${topic.id})}" th:text="${topic.title}"></a>
+  </li>
+
+</ul>
+</body>
+</html>

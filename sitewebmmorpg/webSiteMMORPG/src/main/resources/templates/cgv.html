@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spécifications MMORPG-VORTX</title>
+
+  <!-- Lien vers Bootstrap -->
+  <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+
+<!-- EN-TÊTE -->
+<header class="bg-dark text-white text-center p-4">
+  <h1 class="mb-0">Spécifications des Exigences - MMORPG-VORTX</h1>
+</header>
+
+<!-- NAVIGATION -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container-fluid">
+    <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item"><a class="nav-link" href="#introduction">Introduction</a></li>
+        <li class="nav-item"><a class="nav-link" href="#serveur">Serveur</a></li>
+        <li class="nav-item"><a class="nav-link" href="#site-web">Site Web</a></li>
+        <li class="nav-item"><a class="nav-link" href="#jeu">Jeu</a></li>
+        <li class="nav-item"><a class="nav-link" href="#base-de-donnees">Base de Données</a></li>
+        <li class="nav-item"><a class="nav-link" href="#contraintes">Contraintes</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- CONTENU PRINCIPAL -->
+<main class="container my-4">
+  <!-- Introduction -->
+  <section id="introduction" class="mb-4">
+    <h2 class="h4 text-primary">Introduction</h2>
+    <p>
+      Ce document détaille les spécifications du projet MMORPG-VORTX, couvrant
+      les aspects du jeu, du site web, des bases de données et des serveurs.
+      Il vise à garantir une conformité stricte avec les exigences du client et
+      des développeurs.
+    </p>
+  </section>
+
+  <!-- Serveur -->
+  <section id="serveur" class="mb-4">
+    <h2 class="h4 text-primary">Serveur</h2>
+    <ul>
+      <li>Le serveur est basé sur Ubuntu et utilise Java.</li>
+      <li>Configuration minimale : 8 Go de RAM, processeur équivalent à un i3, connexion filaire.</li>
+      <li>Les commandes incluent <code>help</code>, <code>save</code>, et <code>forceExit</code>.</li>
+    </ul>
+  </section>
+
+  <!-- Site Web -->
+  <section id="site-web" class="mb-4">
+    <h2 class="h4 text-primary">Site Web</h2>
+    <p>
+      Le site web permet aux utilisateurs de télécharger le jeu, consulter des articles,
+      participer à des discussions et acheter des loot boxes.
+    </p>
+    <ul>
+      <li>Fonctionnalités principales : login, register, blog, wiki, forum.</li>
+      <li>Doit être accessible via tout navigateur moderne.</li>
+    </ul>
+  </section>
+
+  <!-- Jeu -->
+  <section id="jeu" class="mb-4">
+    <h2 class="h4 text-primary">Jeu</h2>
+    <ul>
+      <li>Compatible avec Windows, macOS, et Linux.</li>
+      <li>Supporte l’exploration de cartes, les interactions entre joueurs et PNJ, et les quêtes.</li>
+      <li>Basé sur LibGDX pour la gestion des collisions et de la physique.</li>
+    </ul>
+  </section>
+
+  <!-- Base de Données -->
+  <section id="base-de-donnees" class="mb-4">
+    <h2 class="h4 text-primary">Base de Données</h2>
+    <p>
+      La base de données est hébergée sur un serveur MySQL. Elle gère des données en temps réel pour
+      le jeu et le site web.
+    </p>
+    <ul>
+      <li>Configuration minimale : Compatible MySQL, sécurisé avec accès restreint.</li>
+      <li>Support des mises à jour fréquentes et journaux d'accès pour la sécurité.</li>
+    </ul>
+  </section>
+
+  <!-- Contraintes -->
+  <section id="contraintes" class="mb-4">
+    <h2 class="h4 text-primary">Contraintes</h2>
+    <ul>
+      <li>Budget limité à 0€ pour le serveur et le jeu.</li>
+      <li>Doit être optimisé pour fonctionner sur des machines peu puissantes.</li>
+      <li>Respect strict des normes de sécurité des données (chiffrement, journalisation).</li>
+    </ul>
+  </section>
+</main>
+
+<!-- PIED DE PAGE -->
+<footer class="text-center bg-dark text-white py-3">
+  <p class="mb-0">Dernière mise à jour : 2024-12-19</p>
+</footer>
+
+<!-- Script JS Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<body>
+<div id="app">
+    <h1>Changement de l'inventaire</h1>
+
+    <!-- Sélection de l'utilisateur -->
+    <label for="user-select">Sélectionner un utilisateur :</label>
+    <select id="user-select" v-model="selectedUser">
+        <option disabled value="">-- Choisissez un utilisateur --</option>
+        <option v-for="user in usersData" :key="user.id" :value="user">
+            {{ user.username }}
+        </option>
+    </select>
+    <div v-if="selectedUser">
+        <h2>Inventaire de {{ selectedUser.username }}</h2>
+        <ul>
+            <li v-for="(caseInv, index) in selectedUser.personnage.inventaire.cases" :key="index">
+                <input v-model="caseInv.objet" placeholder="Nom de l'objet" />
+            </li>
+        </ul>
+    </div>
+
+    <table v-if="selectedUser" class="table table-striped">
+        <thead>
+        <tr>
+            <th>id</th>
+            <th>typeObjet</th>
+            <th>type</th>
+            <th>x</th>
+            <th>y</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tbody>
+        <tr v-for="caseInventaire in inventaire" :key="caseInventaire.id">
+            <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+            <td><input type="number" v-model="caseInventaire.idJeux"></td>
+            <td><input type="number" v-model="caseInventaire.typeObjet"></td>
+            <td>
+                <select v-model="caseInventaire.type">
+                    <option :value="0">Objet</option>
+                    <option :value="1">Compétence</option>
+                </select>
+            </td>
+            <td>{{ caseInventaire.indexX }}</td>
+            <td>{{ caseInventaire.indexY }}</td>
+            <td>
+                <button @click="sauvegarder(caseInventaire)" class="btn btn-primary">Sauvegarder</button>
+            </td>
+        </tr>
+        </tbody>
+
+        </tbody>
+
+    </table>
+
+</div>
+
+
+
+<script th:inline="javascript">
+    var usersData = /*[[${users}]]*/ [];
+</script>
+
+<script>
+    // console.log(usersData);
+    // let users = usersData;
+    // console.log(users)
+    usersData.forEach((element) => console.log(element.username))
+
+    const app = Vue.createApp({
+        data() {
+            console.log(usersData);
+            return {
+                usersData: usersData,
+                selectedUser: null,
+                inventaire: null,
+            };
+        },
+        methods: {
+            async sauvegarder(caseInventaire) {
+                const formData = new FormData();
+                formData.append("_csrf", document.querySelector("input[name='_csrf']").value);
+                formData.append("idCase", caseInventaire.id);
+                formData.append("idJeu", caseInventaire.idJeux);
+                formData.append("typeObjet", caseInventaire.typeObjet);
+                formData.append("type", caseInventaire.type);
+
+                try {
+                    const response = await fetch("/admin/saveInventaire", {
+                        method: "POST",
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                    } else {
+                        alert("Erreur lors de la sauvegarde.");
+                    }
+                } catch (error) {
+                    console.error("Erreur:", error);
+                }
+            }
+        },
+        watch: {
+            selectedUser(newUser) {
+                if (newUser) {
+                    this.inventaire = newUser.personnage.inventaire.caseInventaires;
+                    console.log(this.inventaire)
+                } else {
+                    this.inventaire = null;
+                }
+            }
+        },
+    });
+    app.mount('#app');
+</script>
+</body>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Objets Obtenus</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: black;
+      color: white;
+      text-align: center;
+    }
+    .container {
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #222;
+      border-radius: 10px;
+      box-shadow: 0px 4px 8px rgba(255, 255, 255, 0.2);
+    }
+    .alert {
+      padding: 10px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+    .alert-success {
+      background-color: #2ecc71;
+      color: white;
+    }
+    .alert-error {
+      background-color: #e74c3c;
+      color: white;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid white;
+    }
+    img {
+      width: 50px;
+      height: auto;
+    }
+    button {
+      background-color: #00b894;
+      color: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    button:hover {
+      background-color: #00897b;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h2>Mes Objets Obtenus</h2>
+
+  <!-- Affichage des messages de succès et d'erreur -->
+  <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+  <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+  <table>
+    <thead>
+    <tr>
+      <th>Nom</th>
+      <th>Type d'objet</th>
+      <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="objet : ${objets}">
+      <td th:text="${objet.itemName}"></td>
+      <td th:text="${objet.typeObjet}"></td>
+      <td>
+        <form method="POST" action="/recuperer-objet">
+          <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+          <input type="hidden" name="objetId" th:value="${objet.id}">
+          <button type="submit" class="btn btn-success">Récupérer l'objet</button>
+        </form>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

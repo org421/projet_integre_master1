@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Forum</title>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        .categories-list {
+            padding: 0;
+            list-style: none;
+        }
+
+        .categories-list .nav-item {
+            margin-bottom: 10px;
+        }
+
+        .categories-list .dropdown-menu {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .topics {
+            margin-left: 35%;
+            padding: 10px;
+        }
+
+        .custom-link {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .custom-link:hover {
+            text-decoration: underline;
+            color: #555;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Sidebar pour les grandes catégories -->
+    <div style="width: 30%; float: left; border-right: 1px solid #ccc; padding: 10px;">
+        <h2>Grandes Catégories</h2>
+        <ul class="categories-list navbar-nav">
+            <li class="nav-item dropdown" th:each="entry : ${categoriesWithSubcategories}">
+                <a class="nav-link dropdown-toggle" href="#" id="dropdownCategory" role="button" data-bs-toggle="dropdown" aria-expanded="false" th:text="${entry.key}"></a>
+                <ul class="dropdown-menu" aria-labelledby="dropdownCategory">
+                    <li th:each="subcategory : ${entry.value}">
+                        <a class="dropdown-item" th:href="@{/forum(categoryId=${subcategory.id})}" th:text="${subcategory.name}"></a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="topics">
+        <!-- Cas où une catégorie est sélectionnée -->
+        <h2 th:if="${category != null}" th:text="'Sujets dans la catégorie : ' + ${category.name}"></h2>
+        <ul th:if="${category != null}">
+            <li th:each="topic : ${topics}">
+                <a class="custom-link" th:href="@{/forum/topic(id=${topic.id})}" th:text="${topic.title}"></a>
+            </li>
+        </ul>
+        <p th:if="${category != null && (topics == null || topics.size() == 0)}">
+            Aucun sujet disponible pour cette catégorie.
+        </p>
+
+        <h3 th:if="${category == null}">Sujets les plus populaires :</h3>
+        <ul th:if="${category == null}">
+            <li th:each="topic : ${topTopics}">
+                <a class="custom-link"  th:href="@{/forum/topic(id=${topic.id})}" th:text="${topic.title}"></a>
+            </li>
+        </ul>
+
+        <h3 th:if="${category == null}">Sujets avec le plus de réponses :</h3>
+        <ul th:if="${category == null}">
+            <li th:each="topic : ${mostRepliedTopics}">
+                <a class="custom-link" th:href="@{/forum/topic(id=${topic.id})}" th:text="${topic.title}"></a>
+
+            </li>
+        </ul>
+
+        <p th:if="${category == null && (topTopics == null || topTopics.size() == 0) && (mostRepliedTopics == null || mostRepliedTopics.size() == 0)}">
+            Aucun sujet disponible pour l'instant.
+        </p>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Statistiques </title>
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="text-center">Statistiques Générales</h1>
+
+    <p><strong>Joueurs en ligne :</strong> <span th:text="${NbJoueurs}">Chargement...</span></p>
+    <p><strong>Nombre total de joueurs inscrits :</strong> <span th:text="${TotalJoueursInscrits}">Chargement...</span></p>
+    <p><strong>Nombre d'admins connectés :</strong> <span th:text="${NbAdminsConnectes}"></span></p>
+
+    <button onclick="window.location.reload();" class="btn btn-primary mt-2">Rafraîchir</button>
+
+</div>
+</body>
+</html>

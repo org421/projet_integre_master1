@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <title>Caisses</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.37/dist/vue.global.prod.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: black;
+            color: black;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            justify-items: center;
+        }
+        .caisse-card {
+            background: white;
+            color: black;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            width: 250px;
+        }
+        .caisse-card img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
+        .caisse-card h2 {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        .caisse-card p {
+            font-size: 14px;
+            color: #666;
+        }
+        .caisse-card button {
+            background-color: black;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        .caisse-card button:hover {
+            background-color: #444;
+        }
+        /* Carrousel */
+        .carrousel-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 80%;
+            max-width: 600px;
+            z-index: 1000;
+        }
+        .carrousel {
+            width: 500px;
+            height: 120px;
+            overflow: hidden;
+            border: 3px solid white;
+            position: relative;
+            margin: auto;
+        }
+        .carrousel-items {
+            display: flex;
+            transition: transform 0.1s ease-out;
+        }
+        .carrousel-item {
+            width: 100px;
+            height: 100px;
+            background: white;
+            color: black;
+            margin: 5px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            text-align: center;
+        }
+        .carrousel-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+        }
+        .carrousel-container button {
+            margin-top: 20px;
+            padding: 10px;
+            background: white;
+            color: black;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .carrousel-container button:hover {
+            background: #ddd;
+        }
+        /* Highlight de l'objet gagné */
+        .highlight {
+            border: 3px solid gold;
+        }
+        /* Zone de sélection (pour visualiser le centre) */
+        .selection-zone {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 100%;
+            border: 2px solid red;
+            box-shadow: 0px 0px 10px red;
+        }
+        .user-tokens {
+            text-align: center; /* Centre le texte */
+            font-size: 20px; /* Agrandit légèrement */
+            font-weight: bold; /* Met en gras */
+            margin-bottom: 15px; /* Ajoute un petit espace sous les tokens */
+        }
+        .user-tokens {
+            text-align: center; /* Centre le texte */
+            font-size: 20px; /* Agrandit légèrement */
+            font-weight: bold; /* Met en gras */
+            margin-bottom: 15px; /* Ajoute un petit espace sous les tokens */
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="container">
+        <div class="title">Toutes les caisses disponibles</div>
+        <div class="user-tokens">
+            🎟️ <strong>Mes tokens :</strong> <span id="user-tokens" th:text="${tokens}"></span>
+        </div>
+        <div class="grid">
+            <div v-for="caisse in caisses" :key="caisse.id" class="caisse-card">
+                <h2>{{ caisse.nom }}</h2>
+                <img :src="caisse.image" alt="Image de la caisse">
+                <p>{{ caisse.description }}</p>
+                <button @click="ouvrirCaisse(caisse)">💰 {{ caisse.prixTokens }} Tokens</button>
+            </div>
+        </div>
+    </div>
+    <!-- Carrousel d'ouverture -->
+    <div v-if="carrouselVisible" class="carrousel-container">
+        <h3>Ouverture de la caisse...</h3>
+        <div class="carrousel">
+            <div class="selection-zone"></div>
+            <div class="carrousel-items" :style="{ transform: `translateX(-${position}px)` }">
+                <div v-for="(item, index) in objetsCarrousel" :key="index"
+                     class="carrousel-item"
+                     :class="{ highlight: index === indexGagnant }">
+                    <img :src="item.image" :alt="item.nom">
+                </div>
+            </div>
+        </div>
+        <h3 v-if="animationTerminee">Tu as gagné : {{ objetsCarrousel[indexGagnant].nom }} </h3>
+        <button v-if="animationTerminee" @click="fermerCarrousel">Fermer</button>
+    </div>
+</div>
+
+<script>
+
+    function getCsrfToken() {
+        return document.querySelector("meta[name='_csrf']").getAttribute("content");
+    }
+
+    // Mapping des items pour chaque type de caisse
+    const mapping = {
+        armes: {
+            1: { nom: "Épée", image: "/img/objets/epee.png" }
+        },
+        armures: {
+            1: { nom: "Casque", image: "/img/objets/casque.png" },
+            2: { nom: "Bottes", image: "/img/objets/bottes.png" },
+            3: { nom: "Plastron", image: "/img/objets/plastron.png" },
+            5: { nom: "Gants", image: "/img/objets/gants.png" }
+        },
+        consommables: {
+            6: { nom: "Potion", image: "/img/objets/potion.png" },
+            7: { nom: "Potion de vitesse", image: "/img/objets/potion.png" }
+        }
+    };
+
+    const app = Vue.createApp({
+        data() {
+            return {
+                // Les caisses pourraient être récupérées depuis la BDD via un endpoint, ici c'est pour l'exemple
+                caisses: [
+                    { id: 1,
+                        nom: "Caisse d’Armes",
+                        description: "Débloque des armes puissantes pour écraser tes ennemis.",
+                        prixTokens: 50,
+                        image: "/img/caisse-armes.png",
+                        type: "armes",
+                        objets: [1]
+                    },
+                    { id: 2,
+                        nom: "Caisse d’Armures",
+                        description: "Renforce ta défense avec des équipements de protection.",
+                        prixTokens: 60,
+                        image: "/img/caisse-armures.png",
+                        type: "armures",
+                        objets: [1, 2, 5, 3]
+                    },
+                    { id: 3,
+                        nom: "Caisse de Consommables",
+                        description: "Prépare-toi au combat avec des potions et objets utiles.",
+                        prixTokens: 45,
+                        image: "/img/caisse-consommables.png",
+                        type: "consommables",
+                        objets: [6,7]
+                    },
+                    { id: 4,
+                        nom: "Caisse Mystère",
+                        description: "Un mélange aléatoire d’armes, armures et consommables.",
+                        prixTokens: 80,
+                        image: "/img/caisse-mystere.png",
+                        type: "mystere",
+                        objets: [1, 2, 3, 5, 6,7]
+                    }
+                ],
+                carrouselVisible: false,
+                objetsCarrousel: [],
+                position: 0,
+                vitesse: 50,
+                animationTerminee: false,
+                indexGagnant: 0,
+                currentCaisse: null
+            };
+        },
+        methods: {
+            ouvrirCaisse(caisse) {
+                const userTokensElement = document.getElementById("user-tokens");
+                const userTokens = parseInt(userTokensElement.textContent, 10);
+
+                if (userTokens < caisse.prixTokens) {
+                    alert("Vous n'avez pas assez de tokens pour ouvrir cette caisse !");
+                    return; // Bloque l'exécution si tokens insuffisants
+                }
+
+                const csrfToken = getCsrfToken(); // Récupération du token CSRF
+
+                // Envoyer la mise à jour des tokens au backend
+                fetch("/caisses/deduct-tokens", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": csrfToken
+                    },
+                    body: JSON.stringify({
+                        tokens: caisse.prixTokens // Nombre de tokens à déduire
+                    })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Mise à jour locale des tokens après confirmation du serveur
+                            userTokensElement.textContent = userTokens - caisse.prixTokens;
+
+                            // Continuer l'animation après validation
+                            this.currentCaisse = caisse;
+                            this.carrouselVisible = true;
+                            this.animationTerminee = false;
+
+                            let mappingForCaisse;
+                            if (caisse.type === "mystere") {
+                                mappingForCaisse = { ...mapping.armures, ...mapping.consommables, ...mapping.armes };
+                            } else {
+                                mappingForCaisse = mapping[caisse.type];
+                            }
+
+                            this.objetsCarrousel = Array.from({ length: 20 }, () => {
+                                let randomId = caisse.objets[Math.floor(Math.random() * caisse.objets.length)];
+                                return mappingForCaisse[randomId];
+                            });
+
+                            this.position = 0;
+                            this.vitesse = 50;
+                            this.indexGagnant = Math.floor(Math.random() * 10) + 5;
+                            this.animerCarrousel();
+                        } else {
+                            alert("Erreur lors de la mise à jour des tokens !");
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Erreur lors de la mise à jour des tokens :", error);
+                        alert("Une erreur est survenue !");
+                    });
+            }
+            ,
+            animerCarrousel() {
+                let interval = setInterval(() => {
+                    this.position += this.vitesse;
+                    // Calcul pour centrer l'item gagnant :
+                    // Chaque item occupe 110px (100px + 2×5px de marge) et le centre du carrousel est à 250px (pour une largeur de 500px).
+                    // Pour centrer, on souhaite que : (indexGagnant * 110 + 50) - position = 250, soit position = (indexGagnant * 110 + 50) - 250.
+                    let positionCible = (this.indexGagnant * 110) + 50 - 250;
+                    if (this.position >= positionCible) {
+                        this.position = positionCible;
+                        clearInterval(interval);
+                        this.animationTerminee = true;
+                        // Une fois l'animation terminée, envoyer le résultat au backend
+                        const gagnant = this.objetsCarrousel[this.indexGagnant];
+                        this.saveResult(gagnant);
+                    }
+                    if (this.position > positionCible - 300) {
+                        this.vitesse *= 0.95;
+                    }
+                    if (this.vitesse < 1) {
+                        this.vitesse = 0;
+                    }
+                }, 50);
+            },
+            saveResult(itemGagne) {
+                console.log("Début de saveResult, itemGagne :", itemGagne);
+
+                const csrfToken = getCsrfToken(); // Récupération du token CSRF
+
+                fetch("/caisses/save-result", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": csrfToken
+                    },
+                    body: JSON.stringify({
+                        caisseId: this.currentCaisse.id,
+                        itemName: itemGagne.nom,
+                        itemImage: itemGagne.image,
+                        itemType: itemGagne.type,
+                        typeObjet: itemGagne.typeObjet
+                    })
+                })
+                    .then(response => response.json())
+                    .then(data => console.log("Résultat enregistré :", data))
+                    .catch(error => console.error("Erreur lors de l'enregistrement :", error));
+            }
+
+
+
+            ,
+
+            fermerCarrousel() {
+                this.carrouselVisible = false;
+            }
+        }
+    });
+    app.mount("#app");
+</script>
+</body>
+</html>

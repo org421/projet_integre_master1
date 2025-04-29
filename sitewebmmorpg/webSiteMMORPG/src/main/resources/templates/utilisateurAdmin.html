@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Utilisateurs</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div id="app" class="container mt-5">
+    <h1>Gestion des Utilisateurs</h1>
+
+    <div class="mb-3" v-if="isSuperAdmin">
+        <label for="roleFilter">Filtrer par rôle :</label>
+        <select id="roleFilter" class="form-control" v-model="selectedRole">
+            <option value="all">Tous</option>
+            <option value="user">Utilisateurs</option>
+            <option value="admin">Administrateurs</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <input
+                type="text"
+                class="form-control"
+                v-model="searchQuery"
+                placeholder="Rechercher un utilisateur (nom ou email)">
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nom</th>
+            <th>Email</th>
+            <th>Rôle</th>
+            <th>Statut</th>
+            <th>Actions</th>
+            <th>Action SA</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="user in filteredUsers" :key="user.id">
+            <td>{{ user.id }}</td>
+            <td>{{ user.nom }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.role }}</td>
+            <td>
+                <span v-if="user.enabled" class="text-success">Actif</span>
+                <span v-else class="text-danger">Inactif</span>
+            </td>
+            <td>
+                <form action="/admin/utilisateur" method="post">
+                    <input hidden="hidden" name="id" :value="user.id">
+                    <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+                    <button
+                            type="submit"
+                            class="btn btn-sm"
+                            :class="user.enabled ? 'btn-danger' : 'btn-success'"
+                            @click="toggleStatus(user)">
+                        {{ user.enabled ? 'Désactiver' : 'Activer' }}
+                    </button>
+                </form>
+            </td>
+            <td>
+                <form v-if="isSuperAdmin" method="post" action="/admin/changeUserRole">
+                    <input type="hidden" name="id" :value="user.id">
+                    <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+                    <button class="btn btn-sm ml-2"
+                            :class="user.role === 'ROLE_ADMIN' ? 'btn-warning' : 'btn-primary'">
+                        {{ user.role === 'ROLE_ADMIN' ? 'Rétrograder' : 'Promouvoir' }}
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script th:inline="javascript">
+    const usersData = JSON.parse(/*[[${users}]]*/ []);
+    const isSuperAdmin = /*[[${isSuperAdmin}]]*/ false;
+</script>
+
+<script>
+    console.log(usersData);
+    const app = Vue.createApp({
+        data() {
+            return {
+                searchQuery: '',
+                users: usersData, // ✅ Liste des utilisateurs chargée par Spring Boot
+                selectedRole: 'all', // ✅ Valeur par défaut
+                isSuperAdmin: isSuperAdmin
+            };
+        },
+        computed: {
+            filteredUsers() {
+                return this.users.filter(user => {
+                    // Vérification du nom/email
+                    const matchesSearch =
+                        user.nom.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+                        user.email.toLowerCase().includes(this.searchQuery.toLowerCase());
+
+                    // Vérification du rôle
+                    const matchesRole =
+                        this.selectedRole === 'all' ||
+                        (this.selectedRole === 'admin' && user.role === 'ROLE_ADMIN') ||
+                        (this.selectedRole === 'user' && user.role === 'ROLE_USER');
+
+                    return matchesSearch && matchesRole;
+                });
+            }
+        }
+        ,
+        methods: {
+            // Activation/Désactivation d'un utilisateur
+            toggleStatus(user) {
+                axios.post(`/admin/users/toggle-status/${user.id}`)
+                    .then(response => {
+                        user.enabled = !user.enabled;
+                    })
+                    .catch(error => {
+                        console.error('Erreur lors du changement de statut :', error);
+                    });
+            }
+        },
+        mounted() {
+            console.log("isSuperAdmin : ", this.isSuperAdmin);
+        }
+    });
+
+    app.mount('#app');
+</script>
+</body>
+</html>

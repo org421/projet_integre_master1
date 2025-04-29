@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+</head>
+<body>
+<div class="main-container mt-5">
+    <form action="/admin/createCategory" method="post">
+        <input type="text" name="Name" class="form-control" id="titre" placeholder="Nom de la catégproe">
+        <input type="text" name="Description" class="form-control mt-3" id="description" placeholder="Description de la catégorie">
+        <div class="form-check mt-3">
+            <input class="form-check-input" type="radio" name="numCategorie" value="0" id="flexRadioDefault0" checked>
+            <label class="form-check-label" for="flexRadioDefault2">
+                Divers
+            </label>
+        </div>
+        <div class="form-check mt-3">
+            <input class="form-check-input" type="radio" name="numCategorie" value="1" id="flexRadioDefault1">
+            <label class="form-check-label" for="flexRadioDefault1">
+                Problèmes techniques
+            </label>
+        </div>
+        <div class="form-check mt-3">
+            <input class="form-check-input" type="radio" name="numCategorie" value="2" id="flexRadioDefault2">
+            <label class="form-check-label" for="flexRadioDefault1">
+                Guide
+            </label>
+        </div>
+        <input type="hidden" name="content" id="quill-content">
+
+
+
+
+
+
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+        <button class="btn btn-primary" type="submit"> Enregistrer </button>
+    </form>
+</div>
+</body>
+</html>

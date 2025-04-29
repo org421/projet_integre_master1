@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="container mt-5">
+    <a href="/admin/nouvel-article" class="btn btn-info m-4">Nouvel article</a>
+    <table class="w-100">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Titre</th>
+                <th scope="col">Description</th>
+                <th scope="col">Voir</th>
+                <th scope="col">Supprimer</th>
+            </tr>
+        </thead>
+        <tbody>
+            <div th:each="article : ${articles}">
+                <tr>
+                    <th scope="row" th:text="${article.id}"></th>
+                    <td th:text="${article.title}"></td>
+                    <td th:text="${article.description}"></td>
+                    <td>Voir</td>
+                    <td>
+                        <form action="/admin/deleteArticle" method="post">
+                            <input hidden="hidden" name="idArticle" th:value="${article.id}">
+                            <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+                            <button type="submit" class="btn btn-danger"> Supprimer </button>
+                        </form>
+                    </td>
+                </tr>
+            </div>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

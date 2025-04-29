@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .question {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #007bff;
+            color: white;
+            padding: 15px 20px;
+            margin: 10px 0;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .question:hover {
+            background-color: #0056b3;
+        }
+
+        .question .icon {
+            font-size: 18px;
+            transform: rotate(0deg);
+            transition: transform 0.3s ease;
+        }
+
+        .question.active .icon {
+            transform: rotate(180deg);
+        }
+
+        .answer {
+            display: none;
+            padding: 15px;
+            background: #f9f9f9;
+            border-left: 4px solid #007bff;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Foire Aux Questions (FAQ)</h1>
+    <div id="faqList">
+        <div th:each="faq : ${faqs}">
+            <div class="question" onclick="toggleAnswer(this)">
+                <span th:text="${faq.question}">Question ici</span>
+                <span class="icon">&#x25BC;</span>
+            </div>
+            <div class="answer">
+                <span th:text="${faq.answer}">Réponse ici</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleAnswer(clickedElement) {
+        const answer = clickedElement.nextElementSibling;
+
+        // Masque toutes les autres réponses
+        document.querySelectorAll('.answer').forEach(item => {
+            if (item !== answer) {
+                item.style.display = 'none'; // Masquer toutes les réponses sauf celle sélectionnée
+                const relatedQuestion = item.previousElementSibling;
+                if (relatedQuestion) {
+                    relatedQuestion.classList.remove('active'); // Retire le style "actif"
+                }
+            }
+        });
+
+        if (answer.style.display === 'block') {
+            answer.style.display = 'none'; // Masquer si déjà visible
+            clickedElement.classList.remove('active'); // Retirer le style "actif"
+        } else {
+            answer.style.display = 'block'; // Afficher si masqué
+            clickedElement.classList.add('active'); // Ajouter le style "actif"
+        }
+    }
+</script>
+</body>
+</html>

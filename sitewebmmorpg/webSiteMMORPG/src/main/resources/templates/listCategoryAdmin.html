@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="container mt-5">
+    <a href="/admin/new-category" class="btn btn-info m-4">Nouvelle catégorie</a>
+    <table class="w-100">
+        <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Nom</th>
+            <th scope="col">Description</th>
+            <th scope="col">Type de la catégorie</th>
+            <th scope="col">Voir</th>
+            <th scope="col">Supprimer</th>
+        </tr>
+        </thead>
+        <tbody>
+        <div th:each="category : ${categories}">
+            <tr>
+                <th scope="row" th:text="${category.id}"></th>
+                <td th:text="${category.name}"></td>
+                <td th:text="${category.description}"></td>
+                <td th:text="${category.numCategorie}"></td>
+                <td>
+                    <a th:href="@{/admin/list-topics(idCategory=${category.id})}" class="btn btn-info">Voir</a>
+                </td>
+
+
+                <td>
+                    <form action="/admin/deleteCategory" method="post">
+                        <input hidden="hidden" name="idCategory" th:value="${category.id}">
+                        <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+                        <button type="submit" class="btn btn-danger"> Supprimer </button>
+                    </form>
+                </td>
+            </tr>
+        </div>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="container mt-5">
+    <h2 class="mb-4">Formulaire d'Utilisateur</h2>
+    <form action="/register" method="post">
+
+        <div class="mb-3">
+            <label for="username" class="form-label">Pseudo</label>
+            <input type="text" name="username" class="form-control" id="username" placeholder="Entrez votre pseudo" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="email" class="form-label">Adresse Email</label>
+            <input type="email" name="email" class="form-control" id="email" placeholder="Entrez votre email" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="mdp" class="form-label">Mot de passe</label>
+            <input type="password" name="mdp" class="form-control" id="mdp" placeholder="Entrez votre mot de passe" required>
+        </div>
+
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+
+        <button type="submit" class="btn btn-primary">Soumettre</button>
+    </form>
+</div>
+</div>
+</body>
+</html>

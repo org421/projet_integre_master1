@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Gestion des FAQs</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+
+    <h1>Ajouter une nouvelle FAQ</h1>
+    <form action="/admin/createFaq" method="post">
+        <div class="form-group mt-3">
+            <label for="question">Question :</label>
+            <textarea name="Question" class="form-control" id="question" placeholder="Entrez la question" required></textarea>
+        </div>
+        <div class="form-group mt-3">
+            <label for="answer">Réponse :</label>
+            <textarea name="Answer" class="form-control" id="answer" placeholder="Entrez la réponse" required></textarea>
+        </div>
+
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+        <button class="btn btn-success mt-3" type="submit">Enregistrer</button>
+    </form>
+
+
+    <h1 class="mt-5">Liste des FAQs</h1>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Question</th>
+            <th>Réponse</th>
+            <th scope="col">Supprimer</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="faq : ${faqs}">
+            <td th:text="${faq.id}"></td>
+            <td th:text="${faq.question}"></td>
+            <td th:text="${faq.answer}"></td>
+            <td>
+                <form action="/admin/deleteFaq" method="post">
+                    <input hidden="hidden" name="idFaq" th:value="${faq.id}">
+                    <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+                    <button type="submit" class="btn btn-danger"> Supprimer </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+</body>
+</html>

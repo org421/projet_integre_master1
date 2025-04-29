@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Achat de Tokens</title>
+    <meta charset="UTF-8">
+    <style>
+        #tokens-content * {
+            all: unset;
+            display: revert;
+        }
+
+        #tokens-content {
+            background-color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            width: 100%;
+        }
+
+        #tokens-content h2 {
+            color: black;
+        }
+
+        #tokens-content .packs-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            justify-content: center;
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        #tokens-content .pack {
+            width: 200px;
+            height: 150px;
+            border-radius: 15px;
+            background-color: lightgray;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            text-align: center;
+        }
+
+        #tokens-content .pack:hover {
+            transform: scale(1.05);
+            background-color: darkgray;
+        }
+
+        #tokens-content .pack h3,
+        #tokens-content .pack p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+
+<div id="tokens-content">
+    <h2>Choisissez un Pack :</h2>
+
+    <div class="packs-container">
+        <div th:each="pack : ${tokenPacks}" class="pack">
+            <h3 th:text="${pack.name}"></h3>
+            <p th:text="'Tokens: ' + ${pack.tokens}"></p>
+            <p th:text="'Prix: ' + ${pack.price} / 100 + ' €'"></p>
+
+            <form method="POST" action="/factures-creer">
+
+                <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+                <input type="hidden" name="packId" th:value="${pack.id}" />
+                <button type="submit" class="btn btn-success">Acheter</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

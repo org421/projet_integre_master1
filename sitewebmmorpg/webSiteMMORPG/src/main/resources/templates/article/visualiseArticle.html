@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link href="/CSS/article.css" rel="stylesheet">
+</head>
+<body>
+<div class="container-fluid my-5">
+    <h2 class="text-center mb-4" th:text="${article.title}"></h2>
+    <div class="content-wrapper" th:utext="${article.content}">
+    </div>
+</div>
+</body>
+</html>
